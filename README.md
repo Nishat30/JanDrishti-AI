@@ -23,7 +23,7 @@ Working CPU prototype: both models trained and verified (emotion micro-F1 0.50, 
 
 ```bash
 pip install -r requirements.txt
-python api.py
+python main.py
 ```
 
 - Browser demo: http://localhost:8000
@@ -35,19 +35,31 @@ curl -X POST http://localhost:8000/analyze \
   -d '{"texts": ["Oh great, another power cut. Just what I needed."]}'
 ```
 
-## Files
+## Structure & Files
 
-| File | Purpose |
-|---|---|
-| `api.py` | FastAPI service — the runnable demo |
-| `inference.py` | Emotion model inference |
-| `sarcasm_model.py` | Sarcasm model inference (baseline + real-checkpoint slot + short-text guard) |
-| `sarcasm_fusion.py` | Combines the two into corrected emotion labels |
-| `preprocess.py` / `sarcasm_preprocess.py` | Dataset loaders |
-| `train_baseline.py` / `train_sarcasm_baseline.py` | CPU baseline training (TF-IDF + Logistic Regression) |
-| `train_transformer.py` / `train_sarcasm_transformer.py` | GPU production training (RoBERTa/DistilBERT) |
-| `data/` / `sarcasm_data/` | GoEmotions and Sarcasm Corpus V2 datasets |
-| `*.joblib` | Trained baseline models, ready to load |
+```
+JanDrishti-AI/
+├── data/                             # GoEmotions dataset (train, dev, test, emotions.txt)
+├── sarcasm_data/                     # Sarcasm Corpus V2 dataset
+├── models/                           # Stored baseline models & checkpoint outputs
+│   ├── emotion_baseline.joblib
+│   └── sarcasm_baseline.joblib
+├── src/                              # Source code directory
+│   ├── api.py                        # FastAPI service & embedded HTML browser demo
+│   ├── inference.py                  # Emotion model inference module
+│   ├── preprocess.py                 # Emotion dataset preprocessing & loader
+│   ├── sarcasm_fusion.py             # Emotion + Sarcasm fusion rules engine
+│   ├── sarcasm_model.py              # Sarcasm model loader & length-dampening guard
+│   ├── sarcasm_preprocess.py         # Sarcasm dataset preprocessing & loader
+│   ├── train_baseline.py             # CPU baseline training (TF-IDF + LogReg for emotions)
+│   ├── train_sarcasm_baseline.py     # CPU baseline training (TF-IDF + LogReg for sarcasm)
+│   ├── train_sarcasm_transformer.py # Fine-tuning script for RoBERTa/DistilBERT sarcasm
+│   └── train_transformer.py          # Fine-tuning script for RoBERTa/DistilBERT emotion
+├── main.py                           # Application entrypoint to run FastAPI service
+├── requirements.txt                  # Python dependencies
+├── README.md                         # Project overview and instructions
+└── .gitignore                        # Git ignore rules
+```
 
 ## Roadmap
 

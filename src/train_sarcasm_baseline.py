@@ -1,10 +1,16 @@
 import time
 import joblib
+from pathlib import Path
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import f1_score, accuracy_score, classification_report
 
-from sarcasm_preprocess import train_test
+try:
+    from .sarcasm_preprocess import train_test
+except ImportError:
+    from src.sarcasm_preprocess import train_test
+
+MODEL_OUT_PATH = Path(__file__).resolve().parents[1] / "models" / "sarcasm_baseline.joblib"
 
 def main():
     train_df, test_df = train_test()
@@ -25,8 +31,9 @@ def main():
     print(f"\nTest accuracy: {acc:.4f}  |  Test F1 (sarc): {f1:.4f}")
     print(classification_report(test_df["label"], preds, target_names=["notsarc", "sarc"]))
 
-    joblib.dump({"vectorizer": vectorizer, "clf": clf}, "sarcasm_baseline.joblib")
-    print("Saved model -> sarcasm_baseline.joblib")
+    MODEL_OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    joblib.dump({"vectorizer": vectorizer, "clf": clf}, MODEL_OUT_PATH)
+    print(f"Saved model -> {MODEL_OUT_PATH}")
 
 if __name__ == "__main__":
     main()

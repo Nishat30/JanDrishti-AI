@@ -8,7 +8,9 @@ any input text. Matches your slide's "Unified API (FastAPI)" layer sitting
 in front of the AI Analytics modules.
 
 Run:
-    python api.py
+    python main.py
+    # or:
+    python -m src.api
     # then in another terminal:
     curl -X POST http://localhost:8000/analyze \
       -H "Content-Type: application/json" \
@@ -22,9 +24,14 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 
-from inference import predict as emotion_predict
-from sarcasm_model import predict_sarcasm_proba
-from sarcasm_fusion import fuse
+try:
+    from .inference import predict as emotion_predict
+    from .sarcasm_model import predict_sarcasm_proba
+    from .sarcasm_fusion import fuse
+except ImportError:
+    from src.inference import predict as emotion_predict
+    from src.sarcasm_model import predict_sarcasm_proba
+    from src.sarcasm_fusion import fuse
 
 app = FastAPI(
     title="JanDrishti AI — Sentiment & Emotion Module",

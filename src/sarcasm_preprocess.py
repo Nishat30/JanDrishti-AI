@@ -2,7 +2,8 @@ import pandas as pd
 from pathlib import Path
 from sklearn.model_selection import train_test_split
 
-DATA_DIR = Path(__file__).parent / "sarcasm_data"
+# Path relative to project root
+DATA_DIR = Path(__file__).resolve().parents[1] / "sarcasm_data"
 SUBSETS = ["GEN-sarc-notsarc.csv", "HYP-sarc-notsarc.csv", "RQ-sarc-notsarc.csv"]
 
 def load_all(dedupe=True) -> pd.DataFrame:

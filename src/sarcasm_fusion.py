@@ -40,8 +40,12 @@ def fuse(
     return results
 
 if __name__ == "__main__":
-    from inference import predict as emotion_predict
-    from sarcasm_model import predict_sarcasm_proba
+    try:
+        from .inference import predict as emotion_predict
+        from .sarcasm_model import predict_sarcasm_proba
+    except ImportError:
+        from src.inference import predict as emotion_predict
+        from src.sarcasm_model import predict_sarcasm_proba
 
     samples = [
         "This is exactly what I needed today, thank you so much!",

@@ -1,4 +1,5 @@
 import argparse
+from pathlib import Path
 import numpy as np
 import torch
 from torch.utils.data import Dataset
@@ -9,7 +10,12 @@ from transformers import (
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.metrics import f1_score
 
-from preprocess import load_split, EMOTIONS
+try:
+    from .preprocess import load_split, EMOTIONS
+except ImportError:
+    from src.preprocess import load_split, EMOTIONS
+
+DEFAULT_OUT_DIR = str(Path(__file__).resolve().parents[1] / "models" / "emotion_transformer")
 
 class GoEmotionsDataset(Dataset):
     def __init__(self, texts, labels, tokenizer, max_len=64):
@@ -41,7 +47,7 @@ def main():
     ap.add_argument("--epochs", type=int, default=3)
     ap.add_argument("--batch_size", type=int, default=32)
     ap.add_argument("--lr", type=float, default=2e-5)
-    ap.add_argument("--out_dir", default="emotion_transformer")
+    ap.add_argument("--out_dir", default=DEFAULT_OUT_DIR)
     args = ap.parse_args()
 
     train_df = load_split("train")

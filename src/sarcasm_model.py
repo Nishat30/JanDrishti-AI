@@ -2,7 +2,11 @@ import os
 from pathlib import Path
 from typing import List
 
-MODEL_PATH = os.environ.get("SARCASM_MODEL_PATH", "sarcasm_transformer")  # <- point this at your real checkpoint
+ROOT_DIR = Path(__file__).resolve().parents[1]
+DEFAULT_TRANSFORMER_PATH = str(ROOT_DIR / "models" / "sarcasm_transformer")
+MODEL_PATH = os.environ.get("SARCASM_MODEL_PATH", DEFAULT_TRANSFORMER_PATH)
+BASELINE_MODEL_PATH = ROOT_DIR / "models" / "sarcasm_baseline.joblib"
+
 MIN_RELIABLE_CHARS = 40  # shortest example in Sarcasm Corpus V2's training data
 
 _backend = None  # lazily resolved: "transformer" | "baseline"
@@ -30,7 +34,7 @@ def _try_load_transformer():
 def _load_baseline():
     global _baseline
     import joblib
-    _baseline = joblib.load("sarcasm_baseline.joblib")
+    _baseline = joblib.load(BASELINE_MODEL_PATH)
 
 
 def _ensure_backend():
@@ -44,7 +48,7 @@ def _ensure_backend():
         _load_baseline()
         _backend = "baseline"
         print("[sarcasm_model] No transformer checkpoint found — "
-              "using TF-IDF+LogReg baseline (sarcasm_baseline.joblib). "
+              f"using TF-IDF+LogReg baseline ({BASELINE_MODEL_PATH.name}). "
               "Run train_sarcasm_transformer.py on a GPU, or set "
               "SARCASM_MODEL_PATH to your existing Sarcasm-V2 checkpoint, "
               "for the real model.")

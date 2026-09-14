@@ -9,11 +9,11 @@ env/
 *.log
 
 # Trained checkpoint dirs produced by the transformer training scripts
-emotion_transformer/
-sarcasm_transformer/
+models/emotion_transformer/
+models/sarcasm_transformer/
 
 # Uncomment if you'd rather not commit the trained baseline models / raw data
 # and instead regenerate them via the train_*.py scripts on clone:
-# *.joblib
+# models/*.joblib
 # data/
 # sarcasm_data/

@@ -1,5 +1,6 @@
 import time
 import joblib
+from pathlib import Path
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
@@ -7,7 +8,12 @@ from sklearn.multiclass import OneVsRestClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.metrics import f1_score, classification_report
 
-from preprocess import load_split, EMOTIONS
+try:
+    from .preprocess import load_split, EMOTIONS
+except ImportError:
+    from src.preprocess import load_split, EMOTIONS
+
+MODEL_OUT_PATH = Path(__file__).resolve().parents[1] / "models" / "emotion_baseline.joblib"
 
 def main():
     print("Loading data...")
@@ -43,9 +49,10 @@ def main():
     print("\nPer-emotion report:")
     print(classification_report(y_dev, y_pred, target_names=EMOTIONS, zero_division=0))
 
+    MODEL_OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     joblib.dump({"vectorizer": vectorizer, "clf": clf, "labels": EMOTIONS},
-                "emotion_baseline.joblib")
-    print("Saved model -> emotion_baseline.joblib")
+                MODEL_OUT_PATH)
+    print(f"Saved model -> {MODEL_OUT_PATH}")
 
 if __name__ == "__main__":
     main()

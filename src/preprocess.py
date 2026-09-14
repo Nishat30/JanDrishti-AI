@@ -1,7 +1,8 @@
 import pandas as pd
 from pathlib import Path
 
-DATA_DIR = Path(__file__).parent / "data"
+# Path relative to project root
+DATA_DIR = Path(__file__).resolve().parents[1] / "data"
 
 with open(DATA_DIR / "emotions.txt") as f:
     EMOTIONS = [l.strip() for l in f if l.strip()]  # 28 labels, index-aligned
