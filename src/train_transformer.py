@@ -1,5 +1,6 @@
 import argparse
 import json
+from pathlib import Path
 import numpy as np
 import torch
 import torch.nn as nn
@@ -11,7 +12,12 @@ from transformers import (
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.metrics import f1_score
 
-from preprocess import load_split, EMOTIONS
+try:
+    from .preprocess import load_split, EMOTIONS
+except ImportError:
+    from src.preprocess import load_split, EMOTIONS
+
+DEFAULT_OUT_DIR = str(Path(__file__).resolve().parents[1] / "models" / "emotion_transformer")
 
 
 class GoEmotionsDataset(Dataset):
@@ -100,7 +106,7 @@ def main():
     ap.add_argument("--warmup_ratio", type=float, default=0.06)
     ap.add_argument("--patience", type=int, default=2,
                      help="Early-stopping patience, in eval epochs")
-    ap.add_argument("--out_dir", default="emotion_transformer")
+    ap.add_argument("--out_dir", default=DEFAULT_OUT_DIR)
     args = ap.parse_args()
 
     train_df = load_split("train")
