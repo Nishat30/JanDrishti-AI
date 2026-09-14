@@ -1,0 +1,12 @@
+# Core (CPU baselines + API) — required
+scikit-learn
+pandas
+joblib
+fastapi
+uvicorn
+
+# For the production transformer scripts (train_transformer.py,
+# train_sarcasm_transformer.py) — run these on a GPU (Colab/Kaggle):
+# torch
+# transformers
+# accelerate
