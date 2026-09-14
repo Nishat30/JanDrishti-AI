@@ -12,6 +12,8 @@ This module covers the **"Sentiment & Emotion"** piece of that pipeline: emotion
 2. **Sarcasm detection** — a separate classifier trained on Sarcasm Corpus V2 estimates how likely the text is sarcastic.
 3. **Fusion** — if sarcasm is detected on text that would otherwise read as positive (e.g. *"Oh great, another power cut, just what I needed"*), the emotion label is corrected to reflect the real sentiment (e.g. annoyance) instead of the literal, misleading one (admiration).
 4. **API** — everything is wrapped in a FastAPI service (`api.py`) with a live browser demo and a `/analyze` endpoint, matching the Unified API layer in our full architecture.
+<img width="2816" height="1204" alt="Gemini_Generated_Image_fplf1kfplf1kfplf" src="https://github.com/user-attachments/assets/16f95ef7-717d-4e53-b0e8-dab20e92439a" />
+
 
 ## Status
 
